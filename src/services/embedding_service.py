@@ -1,39 +1,24 @@
-import torch
-from transformers import BertTokenizer, BertModel
+from sentence_transformers import SentenceTransformer, util
 
-def text_to_embedding(text):
-    # Load pre-trained model tokenizer (vocabulary)
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+class SentenceEmbeddingSimilarity:
+    def __init__(self, model_name='all-MiniLM-L6-v2'):
+        # Load a pre-trained model when the class is instantiated
+        self.model = SentenceTransformer(model_name)
 
-    # Tokenize input text
-    inputs = tokenizer(text, return_tensors='pt', padding=True, truncation=True, max_length=512)
+    def embedding_similarity(self, sentence1, sentence2):
+        # Generate embeddings for both sentences
+        embedding1 = self.model.encode(sentence1)
+        embedding2 = self.model.encode(sentence2)
+        
+        # Compute cosine similarity
+        cosine_sim = util.cos_sim(embedding1, embedding2)
+        
+        return cosine_sim.item()
 
-    # Load pre-trained model
-    model = BertModel.from_pretrained('bert-base-uncased')
-
-    # Ensure the model is in evaluation mode
-    model.eval()
-
-    with torch.no_grad():
-        # Perform forward pass (feed input to the model)
-        outputs = model(**inputs)
-
-    # The last hidden state is typically used as the embeddings
-    last_hidden_states = outputs.last_hidden_state
-
-    # Pooling method: mean of the last hidden states
-    embeddings = torch.mean(last_hidden_states, dim=1)
-
-    return embeddings
-
-def cosine_similarities(real_answers: str, llm_answers):
-    return None
-
-def vector_similarity_llm_answer_real_answer(processed_data):    
-    for _, entry in enumerate(processed_data):                
-        for qa in entry['qas']:                        
-            real_answers = qa['answers'][0]['text']
-            #TODO 
-            llm_answers = qa['llms_answer'] 
-    return processed_data 
+if __name__ == "__main__":
+    # Create an instance of the class
+    similarity_calculator = SentenceEmbeddingSimilarity()
     
+    # Call the embedding_similarity method
+    result = similarity_calculator.embedding_similarity("test 1", "test 2")
+    print(f"Embedding Cosine Similarity: {result}")

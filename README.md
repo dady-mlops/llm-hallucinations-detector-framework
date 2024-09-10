@@ -4,7 +4,6 @@ TODO add description
 
 - python3 -m venv ./venv
 - source ./venv/bin/activate
-- pip3 install --upgrade pip setuptools wheel
 - pip3 install -r requirements.txt
 
 
@@ -42,10 +41,13 @@ success
 ```
 
 #### Dataset
-Natural Questions Data
+Current dataset:
+https://www.kaggle.com/datasets/frankossai/natural-questions-dataset
+
+Useful datasets:
 https://ai.google.com/research/NaturalQuestions/download
 https://www.kaggle.com/datasets/memocan/data-science-interview-q-and-a-treasury
-https://www.kaggle.com/datasets/frankossai/natural-questions-dataset
+
 
 
 
